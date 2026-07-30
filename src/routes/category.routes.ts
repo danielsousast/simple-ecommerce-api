@@ -6,17 +6,28 @@ import {
   getCategoryById,
   updateCategory,
 } from "../controllers/category.controller.js";
+import validateRequest from "../middlewares/validate-request.middleware.js";
+import {
+  validateCategoryId,
+  validateCategoryName,
+} from "../validators/category.validator.js";
 
 const categoryRouter = Router();
 
 categoryRouter.get("/", getCategories);
 
-categoryRouter.post("/", createCategory);
+categoryRouter.post("/", validateCategoryName, validateRequest, createCategory);
 
-categoryRouter.get("/:id", getCategoryById);
+categoryRouter.get("/:id", validateCategoryId, validateRequest, getCategoryById);
 
-categoryRouter.put("/:id", updateCategory);
+categoryRouter.put(
+  "/:id",
+  validateCategoryId,
+  validateCategoryName,
+  validateRequest,
+  updateCategory,
+);
 
-categoryRouter.delete("/:id", deleteCategory);
+categoryRouter.delete("/:id", validateCategoryId, validateRequest, deleteCategory);
 
 export default categoryRouter;
