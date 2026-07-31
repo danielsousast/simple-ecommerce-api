@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+export interface ICategory extends mongoose.Document {
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const categorySchema = new mongoose.Schema(
   {
     name: {
