@@ -6,6 +6,7 @@ import setupI18n from './config/locale.js';
 import { setupCors } from './config/cors.js';
 import categoryRouter from './routes/category.routes.js';
 import userRouter from './routes/user.routes.js';
+import productRouter from './routes/product.routes.js';
 
 connectDatabase()
 
@@ -20,6 +21,7 @@ app.use(morgan('tiny'));
 
 app.use("/categories", categoryRouter);
 app.use('/auth', userRouter);
+app.use('/products', productRouter);
 
 const PORT = process.env.PORT || 3000;
 
