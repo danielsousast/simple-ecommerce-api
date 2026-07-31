@@ -8,6 +8,7 @@ import { setupCors } from './config/cors.js';
 import categoryRouter from './routes/category.routes.js';
 import userRouter from './routes/user.routes.js';
 import productRouter from './routes/product.routes.js';
+import orderRouter from './routes/order.routes.js';
 
 connectDatabase()
 
@@ -24,6 +25,7 @@ app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 app.use("/categories", categoryRouter);
 app.use('/auth', userRouter);
 app.use('/products', productRouter);
+app.use('/orders', orderRouter);
 
 const PORT = process.env.PORT || 3000;
 
