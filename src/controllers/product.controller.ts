@@ -4,8 +4,38 @@ import { getFileUrl } from "../middlewares/upload.middleware.js";
 
 async function getProducts(req: Request, res: Response) {
   try {
-    const products = await Product.find();
+    const { category, search } = req.query;
+    const filter: Record<string, unknown> = {};
+
+    if (typeof category === "string") {
+      filter.category = category;
+    }
+
+    if (typeof search === "string") {
+      const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      filter.$or = [
+        { name: { $regex: escapedSearch, $options: "i" } },
+        { description: { $regex: escapedSearch, $options: "i" } },
+      ];
+    }
+
+    const products = await Product.find(filter).populate("category");
     res.json(products);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || req.t("serverError") });
+  }
+}
+
+async function getProductById(req: Request, res: Response) {
+  try {
+    const product = await Product.findById(req.params.id).populate("category");
+
+    if (!product) {
+      res.status(404).json({ error: req.t("productNotFound") });
+      return;
+    }
+
+    res.json(product);
   } catch (error: any) {
     res.status(500).json({ error: error.message || req.t("serverError") });
   }
@@ -68,4 +98,4 @@ async function updateProduct(req: Request, res: Response) {
   }
 }
 
-export { createProduct, getProducts, updateProduct };
+export { createProduct, getProductById, getProducts, updateProduct };

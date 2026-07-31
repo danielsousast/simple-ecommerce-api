@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createProduct,
+  getProductById,
   getProducts,
   updateProduct,
 } from "../controllers/product.controller.js";
@@ -19,6 +20,7 @@ import {
 const productRouter = Router();
 
 productRouter.get("/", validateGetProducts, validateRequest, getProducts);
+productRouter.get("/:id", validateProductId, validateRequest, getProductById);
 
 // Product creation is restricted to authenticated administrators.
 productRouter.post(

@@ -1,6 +1,21 @@
 import { body, param, query } from "express-validator";
 
 const validateGetProducts = [
+  query("search")
+    .optional()
+    .isString()
+    .withMessage("Search must be text")
+    .bail()
+    .trim()
+    .notEmpty()
+    .withMessage("Search cannot be empty")
+    .bail()
+    .isLength({ max: 100 })
+    .withMessage("Search must not exceed 100 characters"),
+  query("category")
+    .optional()
+    .isMongoId()
+    .withMessage((_, { req }) => req.t("invalidCategoryId")),
   query("page")
     .optional()
     .isInt({ min: 1 })
