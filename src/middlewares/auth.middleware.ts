@@ -4,14 +4,14 @@ import { TokenPayload, verifyToken } from "../helpers/jwt.js";
 declare global {
   namespace Express {
     interface Request {
-      user?: TokenPayload;
+      auth?: TokenPayload;
     }
   }
 }
 
 /**
  * Requires a valid JWT in the Authorization header using the Bearer scheme.
- * The verified token claims are available to following handlers as req.user.
+ * The verified token claims are available to following handlers as req.auth.
  */
 function authenticate(req: Request, res: Response, next: NextFunction): void {
   const authorization = req.headers.authorization;
@@ -22,6 +22,7 @@ function authenticate(req: Request, res: Response, next: NextFunction): void {
   }
 
   const token = authorization.slice("Bearer ".length).trim();
+  // payoad contains the id, email, role, iat and exp of the user if the token is valid, otherwise it is null
   const payload = token ? verifyToken(token) : null;
 
   if (!payload) {
@@ -29,7 +30,7 @@ function authenticate(req: Request, res: Response, next: NextFunction): void {
     return;
   }
 
-  req.user = payload;
+  req.auth = payload;
   next();
 }
 

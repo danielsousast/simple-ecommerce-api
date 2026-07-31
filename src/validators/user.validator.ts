@@ -10,7 +10,7 @@ const validateUserName = [
     .withMessage((_, { req }) => req.t("userNameCannotBeEmpty")),
 ];
 
-const validateUserDetails = [
+const validateProfileDetails = [
   ...validateUserName,
   body("email")
     .isString()
@@ -29,10 +29,6 @@ const validateUserDetails = [
     .bail()
     .isLength({ min: 6 })
     .withMessage((_, { req }) => req.t("passwordMinLength")),
-  body("role")
-    .optional()
-    .isIn(["user", "admin"])
-    .withMessage((_, { req }) => req.t("roleMustBeAdminOrUser")),
   body("city")
     .isString()
     .withMessage((_, { req }) => req.t("cityRequired"))
@@ -70,6 +66,14 @@ const validateUserDetails = [
     .withMessage((_, { req }) => req.t("phoneNumberRequired")),
 ];
 
+const validateUserDetails = [
+  ...validateProfileDetails,
+  body("role")
+    .optional()
+    .isIn(["user", "admin"])
+    .withMessage((_, { req }) => req.t("roleMustBeAdminOrUser")),
+];
+
 const validateLoginDetails = [
   body("email")
     .isString()
@@ -96,4 +100,10 @@ const validateUserId = [
     .withMessage((_, { req }) => req.t("invalidUserIdFormat")),
 ];
 
-export { validateLoginDetails, validateUserDetails, validateUserId, validateUserName };
+export {
+  validateLoginDetails,
+  validateProfileDetails,
+  validateUserDetails,
+  validateUserId,
+  validateUserName,
+};

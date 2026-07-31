@@ -65,31 +65,45 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserById = async (req: Request, res: Response   ) => {
+export const getProfile = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id);
+    const user = await User.findById(req.auth!.id);
+
     if (!user) {
-      return res.status(404).json({ error: req.t("userNotFound") });
+      res.status(404).json({ error: req.t("userNotFound") });
+      return;
     }
+
     res.json(user);
   } catch (error: any) {
     res.status(500).json({ error: error.message || req.t("serverError") });
   }
 };
 
-export const updateUser = async (req: Request, res: Response) => {
+
+export const updateProfile = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const { name, email, password, role, city, state, postalCode, address, phone } = req.body;
-    const user = await User.findByIdAndUpdate(
-      id,
-      { name, email, password, role, city, state, postalCode, address, phone },
-      { new: true }
-    );
+    const user = await User.findById(req.auth!.id);
+
     if (!user) {
-      return res.status(404).json({ error: req.t("userNotFound") });
+      res.status(404).json({ error: req.t("userNotFound") });
+      return;
     }
+
+    const { name, email, password, city, state, postalCode, address, phone } = req.body;
+    const userWithEmail = await User.findOne({
+      email,
+      _id: { $ne: user._id },
+    });
+
+    if (userWithEmail) {
+      res.status(409).json({ error: req.t("userWithEmailAlreadyExists") });
+      return;
+    }
+
+    user.set({ name, email, password, city, state, postalCode, address, phone });
+    await user.save();
+
     res.json(user);
   } catch (error: any) {
     res.status(500).json({ error: error.message || req.t("serverError") });
