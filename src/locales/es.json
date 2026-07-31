@@ -46,6 +46,7 @@
   "priceRequired": "El precio es requerido",
   "productCreatedSuccessfully": "Producto creado exitosamente",
   "productDeletedSuccessfully": "Producto eliminado exitosamente",
+  "orderDeletedSuccessfully": "Pedido eliminado exitosamente",
   "productNotFound": "Producto no encontrado",
   "productTitleLength": "El título del producto debe tener entre 3 y 100 caracteres",
   "productTitleRequired": "El título del producto es requerido",
@@ -97,5 +98,7 @@
   "ratingCannotBeLessThanOne": "La calificación no puede ser menor a 1 estrella",
   "ratingCannotBeMoreThanFive": "La calificación no puede ser mayor a 5 estrellas",
   "ratingCountCannotBeNegative": "El conteo de calificaciones no puede ser negativo",
-  "viewsCannotBeNegative": "Las vistas no pueden ser negativas"
+  "viewsCannotBeNegative": "Las vistas no pueden ser negativas",
+
+  "invalidOrderId": "ID de pedido inválido."
 }

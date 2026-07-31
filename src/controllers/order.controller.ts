@@ -74,4 +74,95 @@ async function createOrder(req: Request, res: Response) {
   }
 }
 
-export { createOrder };
+/**
+ * GET /orders (authenticated)
+ * Lists the authenticated user's own orders, newest first, paginated
+ * via `page`/`limit` query params (both validated upstream).
+ */
+async function getMyOrders(req: Request, res: Response) {
+  try {
+    const { page, limit } = req.query;
+
+    // Default to page 1 / 10 per page when not provided.
+    const pageNumber = typeof page === "string" ? parseInt(page, 10) : 1;
+    const pageLimit = typeof limit === "string" ? parseInt(limit, 10) : 10;
+    const skip = (pageNumber - 1) * pageLimit;
+
+    const filter = { user: req.auth!.id };
+
+    // Fetch the page of results and the total matching count in parallel.
+    const [orders, total] = await Promise.all([
+      Order.find(filter)
+        .populate("items.product")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(pageLimit),
+      Order.countDocuments(filter),
+    ]);
+
+    res.json({
+      data: orders,
+      meta: {
+        total,
+        page: pageNumber,
+        limit: pageLimit,
+        totalPages: Math.ceil(total / pageLimit),
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || req.t("serverError") });
+  }
+}
+
+/**
+ * GET /orders/:id (authenticated)
+ * Fetches a single order belonging to the authenticated user by id,
+ * 404s if it doesn't exist or belongs to someone else.
+ */
+async function getOrderById(req: Request, res: Response) {
+  try {
+    const order = await Order.findOne({
+      _id: req.params.id,
+      user: req.auth!.id,
+    }).populate("items.product");
+
+    if (!order) {
+      res.status(404).json({ error: req.t("orderNotFound") });
+      return;
+    }
+
+    res.json(order);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || req.t("serverError") });
+  }
+}
+
+/**
+ * DELETE /orders/:id (admin only)
+ * Removes an order by id and restocks its items, 404s if it doesn't exist.
+ */
+async function deleteOrder(req: Request, res: Response) {
+  try {
+    const order = await Order.findByIdAndDelete(req.params.id);
+
+    if (!order) {
+      res.status(404).json({ error: req.t("orderNotFound") });
+      return;
+    }
+
+    await Promise.all(
+      order.items.map(({ product, quantity }) =>
+        Product.findByIdAndUpdate(product, { $inc: { stock: quantity } }),
+      ),
+    );
+
+    res.json({
+      status: true,
+      message: req.t("orderDeletedSuccessfully"),
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || req.t("serverError") });
+  }
+}
+
+export { createOrder, deleteOrder, getMyOrders, getOrderById };

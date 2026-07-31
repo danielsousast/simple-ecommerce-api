@@ -46,6 +46,7 @@
   "priceRequired": "O preço é obrigatório",
   "productCreatedSuccessfully": "Produto criado com sucesso",
   "productDeletedSuccessfully": "Produto excluído com sucesso",
+  "orderDeletedSuccessfully": "Pedido excluído com sucesso",
   "productNotFound": "Produto não encontrado",
   "productTitleLength": "O título do produto deve ter entre 3 e 100 caracteres",
   "productTitleRequired": "O título do produto é obrigatório",
@@ -100,6 +101,7 @@
   "viewsCannotBeNegative": "As visualizações não podem ser negativas",
 
   "invalidProductId": "ID de produto inválido.",
+  "invalidOrderId": "ID de pedido inválido.",
   "quantityMustBeWholeNumber": "A quantidade deve ser um número inteiro.",
   "productsNotFound": "Produtos não encontrados",
   "insufficientStock": "Estoque disponível insuficiente."

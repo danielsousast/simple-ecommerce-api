@@ -1,4 +1,15 @@
-import { body } from "express-validator";
+import { body, param, query } from "express-validator";
+
+const validateGetMyOrders = [
+  query("page")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage((_, { req }) => req.t("quantityMustBeWholeNumber")),
+  query("limit")
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage((_, { req }) => req.t("quantityMustBeWholeNumber")),
+];
 
 const validateCreateOrder = [
   body("items")
@@ -47,4 +58,10 @@ const validateCreateOrder = [
     .withMessage((_, { req }) => req.t("shippingDetailsRequired")),
 ];
 
-export { validateCreateOrder };
+const validateOrderId = [
+  param("id")
+    .isMongoId()
+    .withMessage((_, { req }) => req.t("invalidOrderId")),
+];
+
+export { validateCreateOrder, validateGetMyOrders, validateOrderId };

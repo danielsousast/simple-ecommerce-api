@@ -46,6 +46,7 @@
   "priceRequired": "Price is required",
   "productCreatedSuccessfully": "Product created successfully",
   "productDeletedSuccessfully": "Product deleted successfully",
+  "orderDeletedSuccessfully": "Order deleted successfully",
   "productNotFound": "Product not found",
   "productTitleLength": "Product title must be between 3 and 100 characters long",
   "productTitleRequired": "Product title is required",
@@ -100,6 +101,7 @@
   "viewsCannotBeNegative": "Views cannot be negative",
 
   "invalidProductId": "Invalid product ID.",
+  "invalidOrderId": "Invalid order ID.",
   "quantityMustBeWholeNumber": "Quantity must be a whole number.",
   "productsNotFound": "Products are not found",
   "insufficientStock": "Insufficient stock available."
