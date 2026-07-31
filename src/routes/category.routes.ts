@@ -11,14 +11,17 @@ import {
   validateCategoryId,
   validateCategoryName,
 } from "../validators/category.validator.js";
+import authenticate from "../middlewares/auth.middleware.js";
 
 const categoryRouter = Router();
 
 categoryRouter.get("/", getCategories);
+categoryRouter.get("/:id", validateCategoryId, validateRequest, getCategoryById);
+
+// Categories can be browsed publicly, but changing them requires authentication.
+categoryRouter.use(authenticate);
 
 categoryRouter.post("/", validateCategoryName, validateRequest, createCategory);
-
-categoryRouter.get("/:id", validateCategoryId, validateRequest, getCategoryById);
 
 categoryRouter.put(
   "/:id",

@@ -1,6 +1,7 @@
 //create a crud for user
 import express from "express";
 
+import authenticate from "../middlewares/auth.middleware.js";
 import validateRequest from "../middlewares/validate-request.middleware.js";
 import {
   validateLoginDetails,
@@ -11,10 +12,14 @@ import { getUsers, createUser, loginUser, getUserById, updateUser, deleteUser } 
 
 const userRouter = express.Router();
 
-userRouter.get("/", getUsers);
-
+// Public routes: users must be able to create an account and obtain a token.
 userRouter.post("/register", validateUserDetails, validateRequest, createUser);
 userRouter.post("/login", validateLoginDetails, validateRequest, loginUser);
+
+// Every route declared after this middleware requires a valid Bearer token.
+userRouter.use(authenticate);
+
+userRouter.get("/", getUsers);
 
 userRouter.get("/:id", validateUserId, validateRequest, getUserById);
 
