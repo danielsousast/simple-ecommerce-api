@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createProduct,
+  deleteProduct,
   getProductById,
   getProducts,
   updateProduct,
@@ -39,10 +40,22 @@ productRouter.put(
   "/:id",
   authenticate,
   authorize("admin"),
+  uploadMultiple(5),
+  handleUploadError,
   validateProductId,
   validateUpdateProduct,
   validateRequest,
   updateProduct,
+);
+
+// Product deletion is restricted to authenticated administrators.
+productRouter.delete(
+  "/:id",
+  authenticate,
+  authorize("admin"),
+  validateProductId,
+  validateRequest,
+  deleteProduct,
 );
 
 export default productRouter;
