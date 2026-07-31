@@ -1,5 +1,6 @@
 import express from 'express';
 import morgan from 'morgan';
+import { join } from 'node:path';
 import 'dotenv/config';
 import connectDatabase from './config/database.js';
 import setupI18n from './config/locale.js';
@@ -18,6 +19,7 @@ setupI18n(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('tiny'));
+app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
 app.use("/categories", categoryRouter);
 app.use('/auth', userRouter);

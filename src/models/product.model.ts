@@ -21,10 +21,10 @@ const productSchema = new Schema({
     ref: 'Category',
     required: true,
   },
-/*   images: {
+ images: {
     type: [String],
     required: false,
-  }, */
+  },
   stock: {
     type: Number,
     required: [true, 'Please provide stock'],

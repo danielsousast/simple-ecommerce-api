@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Product from "../models/product.model.js";
+import { getFileUrl } from "../middlewares/upload.middleware.js";
 
 async function getProducts(req: Request, res: Response) {
   try {
@@ -12,14 +13,16 @@ async function getProducts(req: Request, res: Response) {
 
 async function createProduct(req: Request, res: Response) {
   try {
-    const { name, description, price, category, images, stock } = req.body;
+    const { name, description, price, category, stock } = req.body;
+    const uploadedFiles = (req.files as Express.Multer.File[] | undefined) ?? [];
+    const images = uploadedFiles.map((file) => getFileUrl(req, file.filename));
 
     const product = await Product.create({
       name,
       description,
       price,
       category,
-      // images,
+      images,
       // convert stock to number if it is a string
       stock: typeof stock === "string" ? parseInt(stock, 10) : stock,
     });

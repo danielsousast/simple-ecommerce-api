@@ -6,6 +6,8 @@ import {
 } from "../controllers/product.controller.js";
 import authenticate from "../middlewares/auth.middleware.js";
 import authorize from "../middlewares/authorization.middleware.js";
+import { uploadMultiple } from "../middlewares/upload.middleware.js";
+import handleUploadError from "../middlewares/upload-error.middleware.js";
 import validateRequest from "../middlewares/validate-request.middleware.js";
 import {
   validateCreateProduct,
@@ -23,6 +25,8 @@ productRouter.post(
   "/",
   authenticate,
   authorize("admin"),
+  uploadMultiple(5),
+  handleUploadError,
   validateCreateProduct,
   validateRequest,
   createProduct,
