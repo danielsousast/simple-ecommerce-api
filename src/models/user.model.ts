@@ -13,6 +13,7 @@ export interface IUser extends Document {
   phone: string;
   createdAt: Date;
   updatedAt: Date;
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const userSchema: Schema<IUser> = new Schema(

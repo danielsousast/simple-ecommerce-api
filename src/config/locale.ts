@@ -9,10 +9,11 @@ const setupI18n = (app: express.Express) => {
     .use(Middleware.LanguageDetector)
     .init({
       backend: {
-        loadPath: "./locales/{{lng}}.json",
+        loadPath: "./src/locales/{{lng}}.json",
       },
       fallbackLng: "en",
       preload: ["en", "pt", "es"],
+      initAsync: false,
     });
 
   app.use(Middleware.handle(i18next));

@@ -57,6 +57,7 @@
   "serverError": "Error interno del servidor",
   "shippingDetailsRequired": "La dirección de envío, ciudad, código postal y número de teléfono son requeridos",
   "statusRequired": "El estado es requerido",
+  "stateRequired": "El estado/provincia es requerido.",
   "stockCountRange": "El conteo de stock debe estar entre 0 y 99999",
   "stockCountRequired": "El conteo de stock es requerido",
   "testing": "¡La prueba de traducción funciona!",

@@ -57,6 +57,7 @@
   "serverError": "Internal server error",
   "shippingDetailsRequired": "Shipping address, city, zip, and phone number are required",
   "statusRequired": "Status is required",
+  "stateRequired": "State is required.",
   "stockCountRange": "Stock count must be between 0 and 99999",
   "stockCountRequired": "Stock count is required",
   "testing": "Testing translation works!",

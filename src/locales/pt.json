@@ -57,6 +57,7 @@
   "serverError": "Erro interno do servidor",
   "shippingDetailsRequired": "Endereço de entrega, cidade, CEP e número de telefone são obrigatórios",
   "statusRequired": "O status é obrigatório",
+  "stateRequired": "O estado é obrigatório.",
   "stockCountRange": "A quantidade em estoque deve estar entre 0 e 99999",
   "stockCountRequired": "A quantidade em estoque é obrigatória",
   "testing": "A tradução de teste funciona!",

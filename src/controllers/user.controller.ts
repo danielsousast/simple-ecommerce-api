@@ -1,6 +1,8 @@
 //create user controller
 import { Request, Response } from "express";
+import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
+import { generateToken } from "../helpers/jwt.js";
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -14,6 +16,12 @@ export const getUsers = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password, role, city, state, postalCode, address, phone } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ error: req.t("userWithEmailAlreadyExists") });
+    }
+
     const newUser = new User({
       name,
       email,
@@ -30,6 +38,27 @@ export const createUser = async (req: Request, res: Response) => {
         status: true,
         message: req.t("userCreatedSuccessfully"),
         data: newUser,
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || req.t("serverError") });
+  }
+};
+
+export const loginUser = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user || !(await user.comparePassword(password))) {
+      return res.status(401).json({ error: req.t("invalidEmailOrPassword") });
+    }
+
+    const token = generateToken(user);
+    res.json({
+      status: true,
+      message: req.t("loginSuccessful"),
+      token,
+      data: user,
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message || req.t("serverError") });
